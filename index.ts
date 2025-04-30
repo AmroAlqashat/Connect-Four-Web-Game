@@ -21,15 +21,17 @@ const switchTurn = (turn: playersTurn): void => {
 
 const board = document.getElementById("board") as HTMLElement;
 for (let i = 0; i < 42; i++) {
-  const circle = `<div class='circle bg-gray-200 hover:bg-blue-500 rounded-full w-20 h-20 duration-75 cursor-pointer'></div>`;
+  const circle = `<div class='circle bg-gray-200 hover:bg-blue-500 rounded-full w-22 h-22 duration-75 cursor-pointer'></div>`;
   board.innerHTML += circle;
 }
 
 const circles = document.querySelectorAll(".circle");
 circles.forEach((circle) => {
   circle.addEventListener("click", () => {
-    console.log(currentTurn);
-    switchTurn(currentTurn);
-    console.log(currentTurn);
+    if(!circle.classList.contains("bg-blue-500") && !circle.classList.contains("bg-red-500")){
+      circle.classList.remove("bg-gray-200");
+      circle.classList.add(`${currentTurn.player1 ? "bg-blue-500" : "bg-red-500"}`);
+      switchTurn(currentTurn);
+    }
   });
 });
