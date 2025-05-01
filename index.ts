@@ -20,18 +20,38 @@ const switchTurn = (turn: playersTurn): void => {
 };
 
 const board = document.getElementById("board") as HTMLElement;
-for (let i = 0; i < 42; i++) {
-  const circle = `<div class='circle bg-gray-200 hover:bg-blue-500 rounded-full w-22 h-22 duration-75 cursor-pointer'></div>`;
-  board.innerHTML += circle;
+for (let i = 0; i < 7; i++) {
+  const column = `<div class='column column-${i} flex flex-col gap-6'></div>`;
+  board.innerHTML += column;
+  for (let j = 0; j < 6; j++) {
+    const circle = `<div class='circle circle-${j} bg-gray-200 hover:bg-blue-500 rounded-full w-18 h-18 lg:w-22 lg:h-22 duration-75 cursor-pointer'></div>`;
+    const column = document.querySelector(`.column-${i}`) as HTMLElement;
+    column.innerHTML += circle;
+  }
 }
 
-const circles = document.querySelectorAll(".circle");
-circles.forEach((circle) => {
-  circle.addEventListener("click", () => {
-    if(!circle.classList.contains("bg-blue-500") && !circle.classList.contains("bg-red-500")){
-      circle.classList.remove("bg-gray-200");
-      circle.classList.add(`${currentTurn.player1 ? "bg-blue-500" : "bg-red-500"}`);
-      switchTurn(currentTurn);
-    }
+const columns = document.querySelectorAll(".column");
+
+columns.forEach((column) => {
+  const circles = column.children;
+
+  Array.from(circles).forEach((circle, index) => {
+    circle.addEventListener("click", () => {
+      for (let i = 5; i >= 0; i--) {
+        if (i >= index) {
+          if (
+            !column.children[i].classList.contains("bg-blue-500") &&
+            !column.children[i].classList.contains("bg-red-500")
+          ) {
+            column.children[i].classList.remove("bg-gray-200");
+            column.children[i].classList.add(
+              currentTurn.player1 ? "bg-blue-500" : "bg-red-500"
+            );
+            switchTurn(currentTurn);
+            break;
+          }
+        }
+      }
+    });
   });
 });
